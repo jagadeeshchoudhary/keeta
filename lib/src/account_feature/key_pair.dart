@@ -4,7 +4,6 @@ import 'package:keeta/src/utils/custom_exception.dart';
 import 'package:keeta/src/utils/string_to_bytes.dart';
 import 'package:meta/meta.dart';
 
-
 @immutable
 class KeyPair {
   const KeyPair({required this.publicKey, final String? privateKey})

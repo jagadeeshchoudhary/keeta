@@ -1,5 +1,4 @@
 class AccountInfo {
-
   const AccountInfo({
     required this.name,
     required this.description,

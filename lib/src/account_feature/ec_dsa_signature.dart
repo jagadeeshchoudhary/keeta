@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:asn1lib/asn1lib.dart';
 
 class ECDSASignature {
-
   const ECDSASignature({required this.r, required this.s});
 
   /// Parse DER-encoded ECDSA signature ([r, s])
