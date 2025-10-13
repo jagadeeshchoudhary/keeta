@@ -5,7 +5,7 @@ import 'package:keeta/src/account_feature/key_pair.dart';
 import 'package:keeta/src/utils/custom_exception.dart';
 import 'package:keeta/src/utils/string_to_bytes.dart';
 
-class IdentifierKeyPair implements KeyCreateable, Signable, Verifiable {
+class IdentifierKeyPair implements KeyUtils {
   @override
   KeyPair create({required final String fromSeed}) {
     final String privateKey = base64Encode(fromSeed.toBytes());

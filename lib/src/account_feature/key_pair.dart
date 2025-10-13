@@ -33,9 +33,12 @@ class KeyPair {
   }
 
   @override
-  int get hashCode =>
-      publicKey.toLowerCase().hashCode ^
-      (_privateKey?.toLowerCase().hashCode ?? 0);
+  int get hashCode => publicKey.hashCode;
+
+  // @override
+  // int get hashCode =>
+  //     publicKey.toLowerCase().hashCode ^
+  //     (_privateKey?.toLowerCase().hashCode ?? 0);
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'publicKey': publicKey,
@@ -54,11 +57,11 @@ class KeyPair {
     return using.sign(data: data, key: privateKeyBytes);
   }
 
-  bool verify(
-    final Uint8List data,
-    final Uint8List signature,
-    final Verifiable using,
-  ) {
+  bool verify({
+    required final Uint8List data,
+    required final Uint8List signature,
+    required final Verifiable using,
+  }) {
     final Uint8List publicKeyBytes = publicKey.toBytes();
     return using.verify(data: data, signature: signature, key: publicKeyBytes);
   }
@@ -83,3 +86,6 @@ abstract interface class Verifiable {
 
   Uint8List signatureFromDER(final Uint8List signature);
 }
+
+abstract interface class KeyUtils
+    implements KeyCreateable, Signable, Verifiable {}

@@ -9,7 +9,7 @@ import 'package:keeta/src/utils/string_to_bytes.dart';
 import 'package:pointycastle/digests/sha3.dart';
 import 'package:secp256k1/secp256k1.dart';
 
-class EcDSA implements KeyCreateable, Signable, Verifiable {
+class EcDSA implements KeyUtils {
   /// Converts bytes to BigInt
   static BigInt _bytesToBigInt(final Uint8List bytes) => BigInt.parse(
     bytes.map((final int b) => b.toRadixString(16).padLeft(2, '0')).join(),

@@ -6,7 +6,7 @@ import 'package:keeta/src/account_feature/key_pair.dart';
 import 'package:keeta/src/utils/hash.dart';
 import 'package:keeta/src/utils/string_to_bytes.dart';
 
-class Ed25519 implements KeyCreateable, Signable, Verifiable {
+class Ed25519 implements KeyUtils {
   @override
   KeyPair create({required final String fromSeed}) {
     final String privateKey = Hash.create(fromBytes: fromSeed.toBytes());

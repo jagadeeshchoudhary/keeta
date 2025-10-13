@@ -129,7 +129,6 @@ linter:
     - prefer_foreach
     - prefer_function_declarations_over_variables
     - prefer_generic_function_type_aliases
-    - prefer_if_elements_to_conditional_expressions
     - prefer_if_null_operators
     - prefer_initializing_formals
     - prefer_inlined_adds
@@ -160,7 +159,6 @@ linter:
     - specify_nonobvious_local_variable_types
     - specify_nonobvious_property_types
     - strict_top_level_inference
-    - switch_on_type
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
@@ -176,7 +174,6 @@ linter:
     - unnecessary_const
     - unnecessary_constructor_name
     - unnecessary_getters_setters
-    - unnecessary_ignore
     - unnecessary_lambdas
     - unnecessary_late
     - unnecessary_library_directive
@@ -195,7 +192,6 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
-    - unnecessary_unawaited
     - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks
@@ -211,7 +207,6 @@ linter:
     - use_key_in_widget_constructors
     - use_late_for_private_fields_and_variables
     - use_named_constants
-    - use_null_aware_elements
     - use_raw_strings
     - use_rethrow_when_possible
     - use_setters_to_change_properties
