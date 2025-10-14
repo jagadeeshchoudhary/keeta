@@ -69,6 +69,24 @@ class CustomException implements Exception {
     'Invalid operation type',
   );
 
+  static const CustomException invalidAmount = CustomException(
+    'Invalid amount',
+  );
+
+  static const CustomException invalidSequenceLength = CustomException(
+    'Invalid sequence length',
+  );
+
+  static const CustomException invalidTo = CustomException('Invalid to');
+
+  static const CustomException invalidToken = CustomException('Invalid token');
+  static const CustomException invalidAdjustMethod = CustomException(
+    'Invalid Method',
+  );
+  static const CustomException invalidIdentifier = CustomException(
+    'Invalid Identifier',
+  );
+
   @override
   String toString() => message;
 }
