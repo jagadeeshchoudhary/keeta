@@ -1,21 +1,8 @@
 import 'package:asn1lib/asn1lib.dart';
+import 'package:keeta/src/operations/admin_supply_adjust_method.dart';
 import 'package:keeta/src/operations/bloc_operation.dart';
 import 'package:keeta/src/operations/bloc_operation_type.dart';
 import 'package:keeta/src/utils/utils.dart';
-
-enum AdminSupplyAdjustMethod {
-  add(0),
-  subtract(1),
-  set(2);
-
-  const AdminSupplyAdjustMethod(this.rawValue);
-  final int rawValue;
-  static AdminSupplyAdjustMethod fromRawValue(final int value) =>
-      AdminSupplyAdjustMethod.values.firstWhere(
-        (final AdminSupplyAdjustMethod e) => e.rawValue == value,
-        orElse: () => throw ArgumentError('Invalid key algorithm: $value'),
-      );
-}
 
 class TokenAdminSupplyOperation extends BlockOperation {
   TokenAdminSupplyOperation({required this.amount, required this.method});
