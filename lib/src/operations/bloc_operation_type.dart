@@ -19,13 +19,13 @@ extension BlockOperationTypeX on BlockOperationType {
       case BlockOperationType.setInfo:
         return 2;
       case BlockOperationType.createIdentifier:
-        return 4;
+        return 3;
       case BlockOperationType.tokenAdminSupply:
-        return 5;
+        return 4;
       case BlockOperationType.tokenAdminModifyBalance:
-        return 6;
+        return 5;
       case BlockOperationType.receive:
-        return 7;
+        return 6;
     }
   }
 }

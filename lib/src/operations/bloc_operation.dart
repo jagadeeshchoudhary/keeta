@@ -4,6 +4,8 @@ import 'package:keeta/src/utils/utils.dart';
 
 /// ------------------- BlockOperation -------------------
 abstract class BlockOperation {
+  const BlockOperation();
+
   /// Constructs an instance from ASN.1 sequence
   factory BlockOperation.fromSequence(final List<ASN1Object> _) {
     // This factory constructor needs to be implemented by concrete classes
