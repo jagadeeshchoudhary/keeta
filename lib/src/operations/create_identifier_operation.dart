@@ -3,10 +3,11 @@ import 'dart:typed_data';
 import 'package:asn1lib/asn1lib.dart';
 import 'package:keeta/src/account_feature/account.dart';
 import 'package:keeta/src/account_feature/key_algorithm.dart';
+import 'package:keeta/src/operations/bloc_operation.dart';
 import 'package:keeta/src/operations/bloc_operation_type.dart';
 import 'package:keeta/src/utils/utils.dart';
 
-class CreateIdentifierOperation {
+class CreateIdentifierOperation extends BlockOperation {
   CreateIdentifierOperation({required this.identifier});
   factory CreateIdentifierOperation.fromSequence(
     final List<ASN1Object> sequence,
@@ -29,4 +30,13 @@ class CreateIdentifierOperation {
   final BlockOperationType blockOperationType =
       BlockOperationType.createIdentifier;
   final Uint8List identifier;
+
+  @override
+  List<ASN1Object> asn1Values() {
+    final List<ASN1Object> values = <ASN1Object>[ASN1OctetString(identifier)];
+    return values;
+  }
+
+  @override
+  BlockOperationType get operationType => blockOperationType;
 }
