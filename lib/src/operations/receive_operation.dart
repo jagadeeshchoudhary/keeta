@@ -15,7 +15,7 @@ class ReceiveOperation extends BlockOperation {
     this.forward,
   }) {
     if (forward == from) {
-      throw CustomException.cantForwardToFromAccount;
+      throw CustomException.cantForwardtoSameAccount;
     } else if (forward != null && !exact) {
       throw CustomException.invalidExactWhenForwarding;
     }

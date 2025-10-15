@@ -105,13 +105,17 @@ class CustomException implements Exception {
     'Unknown Permission Flag',
   );
 
-  static var cantForwardToFromAccount;
+  static const CustomException cantForwardtoSameAccount = CustomException(
+    'Can not Forward To Same Account.',
+  );
 
-  static var invalidExactWhenForwarding;
+  static const CustomException invalidExactWhenForwarding = CustomException(
+    'Invalid Exact When Forward',
+  );
 
-  static var invalidFrom;
+  static const CustomException invalidFrom = CustomException('Invalid From');
 
-  static var invalidExact;
+  static const CustomException invalidExact = CustomException('Invalid Exact');
 
   @override
   String toString() => message;
