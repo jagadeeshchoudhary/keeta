@@ -19,7 +19,7 @@ class SendOperation extends BlockOperation {
   }
 
   factory SendOperation.fromSequence(final List<ASN1Object> sequence) {
-    if (sequence.length != 3 || sequence.length != 4) {
+    if (sequence.length != 3 && sequence.length != 4) {
       throw CustomException.invalidSequenceLength;
     } else if (sequence[0] is! ASN1OctetString) {
       throw CustomException.invalidTo;

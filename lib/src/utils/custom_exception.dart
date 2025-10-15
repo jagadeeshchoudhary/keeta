@@ -87,6 +87,32 @@ class CustomException implements Exception {
     'Invalid Identifier',
   );
 
+  static const CustomException invalidName = CustomException('Invalid Name');
+
+  static const CustomException invalidDescription = CustomException(
+    'Invalid Description',
+  );
+
+  static const CustomException metaData = CustomException('Invalid MetaData');
+  static const CustomException invalidPermissionSequenceLength =
+      CustomException('Invalid Permission Sequence Length');
+
+  static const CustomException invalidPermissionFlags = CustomException(
+    'Invalid Permission Flags',
+  );
+
+  static const CustomException unknownPermissionFlag = CustomException(
+    'Unknown Permission Flag',
+  );
+
+  static var cantForwardToFromAccount;
+
+  static var invalidExactWhenForwarding;
+
+  static var invalidFrom;
+
+  static var invalidExact;
+
   @override
   String toString() => message;
 }
