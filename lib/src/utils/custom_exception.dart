@@ -117,6 +117,25 @@ class CustomException implements Exception {
 
   static const CustomException invalidExact = CustomException('Invalid Exact');
 
+  static const CustomException seedIndexNegative = CustomException(
+    'seedIndexNegative',
+  );
+  static const CustomException seedIndexTooLarge = CustomException(
+    'seedIndexTooLarge',
+  );
+  static const CustomException invalidPublicKeyPrefix = CustomException(
+    'invalidPublicKeyPrefix',
+  );
+  static const CustomException invalidPublicKeyChecksum = CustomException(
+    'invalidPublicKeyChecksum',
+  );
+  static const CustomException invalidInput = CustomException(
+    'Invalid Input',
+  );
+  static const CustomException invalidLength = CustomException(
+    'Invalid Length',
+  );
+
   @override
   String toString() => message;
 }

@@ -1,8 +1,9 @@
 import 'dart:typed_data';
-// import 'package:convert/convert.dart';
+import 'package:keeta/src/account_feature/account_builder.dart';
 import 'package:keeta/src/account_feature/key_algorithm.dart';
 import 'package:keeta/src/account_feature/key_pair.dart';
 import 'package:keeta/src/account_feature/signing_options.dart';
+import 'package:keeta/src/block_feature/block.dart';
 import 'package:keeta/src/utils/utils.dart';
 
 class Account {
@@ -30,14 +31,14 @@ class Account {
   }
 
   /// Constructor: Account(data: Data)
-  // factory Account.fromData(final Uint8List data) {
-  //   final String publicKey = Account.publicKeyStringFromBytes(data);
-  //   return AccountBuilder.create(fromPublicKey: publicKey);
-  // }
+  factory Account.fromData(final Uint8List data) {
+    final String publicKey = Account.publicKeyStringFromBytes(data);
+    return AccountBuilder.createFromPublicKey(publicKey: publicKey);
+  }
 
   /// Constructor: Account(publicKeyAndType: PublicKeyAndType)
-  // factory Account.fromPublicKeyAndType(final Uint8List publicKeyAndType) =>
-  //     Account.fromData(publicKeyAndType);
+  factory Account.fromPublicKeyAndType(final Uint8List publicKeyAndType) =>
+      Account.fromData(publicKeyAndType);
 
   Account._({
     required this.keyPair,
@@ -99,8 +100,9 @@ class Account {
     final KeyUtils verifier = keyAlgorithm.utils;
 
     // When handling X.509 certificates, we must process DER encoded data
-    final Uint8List finalSignature =
-        options.forCert ? verifier.signatureFromDER(signature) : signature;
+    final Uint8List finalSignature = options.forCert
+        ? verifier.signatureFromDER(signature)
+        : signature;
 
     return keyPair.verify(
       data: preparedData,
@@ -110,29 +112,28 @@ class Account {
   }
 
   /// Generate identifier account
-  // Account generateIdentifier({final KeyAlgorithm type = KeyAlgorithm.token}) 
-  // {
-  //   if (isIdentifier) {
-  //     if (keyAlgorithm != KeyAlgorithm.network) {
-  //       throw CustomException.invalidIdentifierAccount;
-  //     }
-  //     if (type != KeyAlgorithm.token) {
-  //       throw CustomException.invalidIdentifierAlgorithm;
-  //     }
-  //   }
+  Account generateIdentifier({final KeyAlgorithm type = KeyAlgorithm.token}) {
+    if (isIdentifier) {
+      if (keyAlgorithm != KeyAlgorithm.network) {
+        throw CustomException.invalidIdentifierAccount;
+      }
+      if (type != KeyAlgorithm.token) {
+        throw CustomException.invalidIdentifierAlgorithm;
+      }
+    }
 
-  //   final accountOpeningHash = Block.accountOpeningHash(forAccount: this);
-  //   final blockHash = accountOpeningHash.toBytes();
+    final String accountOpeningHash = Block.accountOpeningHash(this);
+    final Uint8List blockHash = accountOpeningHash.toBytes();
 
-  //   final Uint8List combinedBytes = Uint8List.fromList(<int>[
-  //     ...publicKeyAndType,
-  //     ...blockHash,
-  //   ]);
+    final Uint8List combinedBytes = Uint8List.fromList(<int>[
+      ...publicKeyAndType,
+      ...blockHash,
+    ]);
 
-  //   final String seed = Hash.create(fromBytes: combinedBytes);
+    final String seed = Hash.create(fromBytes: combinedBytes);
 
-  //   return AccountBuilder.create(fromSeed: seed, index: 0, algorithm: type);
-  // }
+    return AccountBuilder.createFromSeed(seed: seed, index: 0, algorithm: type);
+  }
 
   /// Prepare data for signing/verification
   Uint8List _prepare({

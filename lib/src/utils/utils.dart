@@ -1,3 +1,4 @@
+export 'base_32_decoder.dart';
 export 'base_32_encoder.dart';
 export 'bytes_to_hex.dart';
 export 'custom_exception.dart';
