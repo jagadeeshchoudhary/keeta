@@ -42,7 +42,7 @@ class ReceiveOperation extends BlockOperation {
     Account? forward;
     if (sequence.length == 5) {
       final Uint8List forwardData = (sequence[4] as ASN1OctetString).octets;
-      forward = Account.fromData(fromData);
+      forward = Account.fromData(forwardData);
     } else {
       forward = null;
     }

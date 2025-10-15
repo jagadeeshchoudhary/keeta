@@ -1,5 +1,4 @@
 import 'package:asn1lib/asn1lib.dart';
-import 'package:keeta/src/utils/utils.dart';
 
 enum BaseFlag {
   access(0x0001),
