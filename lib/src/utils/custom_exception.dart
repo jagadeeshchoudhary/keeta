@@ -1,5 +1,7 @@
 class CustomException implements Exception {
   const CustomException(this.message);
+  const CustomException.invalidPublicKeyAlgo({required final String key})
+    : message = 'Invalid Public Key Algorithm: $key';
 
   const CustomException.invalidPublicKeyLength(final int length)
     : message = 'Invalid public key length: $length';
@@ -129,9 +131,7 @@ class CustomException implements Exception {
   static const CustomException invalidPublicKeyChecksum = CustomException(
     'invalidPublicKeyChecksum',
   );
-  static const CustomException invalidInput = CustomException(
-    'Invalid Input',
-  );
+  static const CustomException invalidInput = CustomException('Invalid Input');
   static const CustomException invalidLength = CustomException(
     'Invalid Length',
   );

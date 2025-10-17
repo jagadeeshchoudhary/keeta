@@ -5,7 +5,9 @@ import 'package:keeta/src/account_feature/key_pair.dart';
 import 'package:keeta/src/account_feature/signing_options.dart';
 import 'package:keeta/src/block_feature/block.dart';
 import 'package:keeta/src/utils/utils.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class Account {
   /// Constructor: Account(keyPair: KeyPair, keyAlgorithm: KeyAlgorithm)
   factory Account({
@@ -40,7 +42,7 @@ class Account {
   factory Account.fromPublicKeyAndType(final Uint8List publicKeyAndType) =>
       Account.fromData(publicKeyAndType);
 
-  Account._({
+  const Account._({
     required this.keyPair,
     required this.publicKeyString,
     required this.publicKeyAndType,
@@ -50,6 +52,56 @@ class Account {
   final String publicKeyString;
   final Uint8List publicKeyAndType;
   final KeyAlgorithm keyAlgorithm;
+
+  @override
+  bool operator ==(final Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Account) {
+      return false;
+    }
+    return keyAlgorithm == other.keyAlgorithm &&
+        keyPair == other.keyPair &&
+        publicKeyString == other.publicKeyString &&
+        _listEquals(publicKeyAndType, other.publicKeyAndType);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    keyAlgorithm,
+    keyPair,
+    publicKeyString,
+    _bytesHash(publicKeyAndType),
+  );
+
+  static bool _listEquals(final List<int> a, final List<int> b) {
+    if (identical(a, b)) {
+      return true;
+    }
+    if (a.length != b.length) {
+      return false;
+    }
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static int _bytesHash(final List<int> bytes) {
+    int hash = 0;
+    for (final int b in bytes) {
+      hash = 0x1fffffff & (hash + b);
+      hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+      hash ^= hash >> 6;
+    }
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    hash ^= hash >> 11;
+    hash = 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+    return hash;
+  }
 
   // Constants
   static const Map<int, int> publicKeyLengths = <int, int>{
@@ -167,6 +219,7 @@ class Account {
     // Construct the array of public key bytes
     final Uint8List keyBytes = fromPublicKey.toBytes();
     final List<int> pubKeyValues = <int>[algorithm.rawValue, ...keyBytes];
+    fromPublicKey.toBytes();
 
     return publicKeyStringFromBytes(Uint8List.fromList(pubKeyValues));
   }
@@ -178,17 +231,20 @@ class Account {
       fromData: keyBytes,
       length: checksumLength,
     );
-    keyBytes.addAll(checksumBytes);
+    final Uint8List extendedKeyBytes = Uint8List.fromList(<int>[
+      ...keyBytes,
+      ...checksumBytes,
+    ]);
 
     // Ensure we have the right size
     if (!publicKeyLengths.values.any(
-      (final int length) => keyBytes.length == length,
+      (final int length) => extendedKeyBytes.length == length,
     )) {
-      throw CustomException.invalidPublicKeyLength(keyBytes.length);
+      throw CustomException.invalidPublicKeyLength(extendedKeyBytes.length);
     }
 
     final String accountPrefix = accountPrefixes[0];
-    final String output = Base32Encoder.encode(bytes: keyBytes);
+    final String output = Base32Encoder.encode(bytes: extendedKeyBytes);
 
     return '$accountPrefix$output';
   }

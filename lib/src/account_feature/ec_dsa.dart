@@ -50,11 +50,11 @@ class EcDSA implements KeyUtils {
     required final Uint8List key,
   }) {
     final PrivateKey privateKey = PrivateKey.fromHex(hex.encode(key));
-
-    final SHA3Digest digest = SHA3Digest(256);
-    final Uint8List hash = digest.process(data);
-    final String hashHex = hex.encode(hash);
-
+    // If input isn't a 32-byte digest, hash it with SHA3-256
+    final Uint8List digest = data.length == Hash.digestLength
+        ? data
+        : SHA3Digest(256).process(data);
+    final String hashHex = hex.encode(digest);
     final Signature sig = privateKey.signature(hashHex);
 
     // Return compact representation (64 bytes)
@@ -112,10 +112,19 @@ class EcDSA implements KeyUtils {
       if (signature.length != 64) {
         return false;
       }
-      final PublicKey publicKey = PublicKey.fromHex(hex.encode(key));
-      final SHA3Digest digest = SHA3Digest(256);
-      final Uint8List hash = digest.process(data);
-      final String hashHex = hex.encode(hash);
+      PublicKey publicKey;
+      final String keyHex = hex.encode(key);
+      try {
+        publicKey = PublicKey.fromHex(keyHex);
+      } catch (_) {
+        // Fallback for compressed keys if required by library
+        publicKey = PublicKey.fromCompressedHex(keyHex);
+      }
+      // If input isn't a 32-byte digest, hash it with SHA3-256
+      final Uint8List digest = data.length == Hash.digestLength
+          ? data
+          : SHA3Digest(256).process(data);
+      final String hashHex = hex.encode(digest);
 
       // Parse signature from compact representation (64 bytes: r + s)
       final BigInt r = _bytesToBigInt(signature.sublist(0, 32));

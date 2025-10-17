@@ -78,10 +78,10 @@ mixin AccountBuilder {
   }
 
   /// Create account from private key
-  static Account createFromPrivateKey(
-    final String privateKey,
-    final KeyAlgorithm algorithm,
-  ) {
+  static Account createFromPrivateKey({
+    required final String privateKey,
+    required final KeyAlgorithm algorithm,
+  }) {
     final KeyPair keyPair = algorithm.utils.keypair(fromPrivateKey: privateKey);
     return Account(keyPair: keyPair, keyAlgorithm: algorithm);
   }
@@ -102,13 +102,14 @@ mixin AccountBuilder {
       throw CustomException.seedIndexTooLarge;
     }
 
-    final Uint8List seedBytes = seed.toBytes()
-      ..addAll(<int>[
-        (indexValue >> 24 & BigInt.from(0xff)).toInt(),
-        (indexValue >> 16 & BigInt.from(0xff)).toInt(),
-        (indexValue >> 8 & BigInt.from(0xff)).toInt(),
-        (indexValue & BigInt.from(0xff)).toInt(),
-      ]);
+    final Uint8List seedBytes = Uint8List.fromList(<int>[
+      ...seed.toBytes(),
+
+      (indexValue >> 24 & BigInt.from(0xff)).toInt(),
+      (indexValue >> 16 & BigInt.from(0xff)).toInt(),
+      (indexValue >> 8 & BigInt.from(0xff)).toInt(),
+      (indexValue & BigInt.from(0xff)).toInt(),
+    ]);
 
     return seedBytes.toHexString().toUpperCase();
   }

@@ -11,7 +11,14 @@ mixin Base32Decoder {
     Uint8List? result;
 
     try {
-      result = base32.decode(value);
+      // Normalize to RFC4648: uppercase and pad to multiple of 8 with '='
+      String normalized = value.toUpperCase();
+      final int rem = normalized.length % 8;
+      if (rem != 0) {
+        normalized = normalized + '=' * (8 - rem);
+      }
+
+      result = base32.decode(normalized);
     } catch (_) {
       throw CustomException.invalidInput;
     }

@@ -1,14 +1,15 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:keeta/src/account_feature/key_pair.dart';
 import 'package:keeta/src/utils/custom_exception.dart';
+import 'package:keeta/src/utils/hash.dart';
 import 'package:keeta/src/utils/string_to_bytes.dart';
 
 class IdentifierKeyPair implements KeyUtils {
   @override
   KeyPair create({required final String fromSeed}) {
-    final String privateKey = base64Encode(fromSeed.toBytes());
+    // Derive 32-byte identifier key as SHA3-256 of seed
+    final String privateKey = Hash.create(fromBytes: fromSeed.toBytes());
     return keypair(fromPrivateKey: privateKey);
   }
 

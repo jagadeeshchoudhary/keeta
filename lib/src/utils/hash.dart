@@ -53,7 +53,8 @@ mixin Hash {
     // SHA3-256 has a block size of 136 bytes (1088 bits)
     final HMac hmac = HMac(_sha3_256(), 136)..init(KeyParameter(prk));
 
-    final List<int> ret = <int>[]..length = numBlocks * digestLength;
+    final List<int> ret = List<int>.filled(numBlocks * digestLength, 0);
+
     int offset = 0;
     List<int> value = <int>[];
 
