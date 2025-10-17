@@ -34,7 +34,7 @@ class Permission {
   final BaseFlag? baseFlag;
 
   List<ASN1Object> asn1Values() => <ASN1Object>[
-        ASN1Integer(baseFlag!.bigIntValue),
-        ASN1Integer(BigInt.zero),
-      ];
+    ASN1Integer(baseFlag!.bigIntValue),
+    ASN1Integer(BigInt.zero),
+  ];
 }

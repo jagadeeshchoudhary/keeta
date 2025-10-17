@@ -45,7 +45,7 @@ class SendOperation extends BlockOperation {
       external: external,
     );
   }
-  
+
   final BlockOperationType blockOperationType = BlockOperationType.send;
   final BigInt amount;
   final Uint8List toAccount;

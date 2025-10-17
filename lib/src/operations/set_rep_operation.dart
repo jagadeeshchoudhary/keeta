@@ -7,7 +7,7 @@ import 'package:keeta/src/operations/bloc_operation_type.dart';
 import 'package:keeta/src/utils/custom_exception.dart';
 
 class SetRepOperation extends BlockOperation {
-   SetRepOperation({required this.toAccount});
+  SetRepOperation({required this.toAccount});
 
   factory SetRepOperation.fromSequence(final List<ASN1Object> sequence) {
     if (sequence.length != 1) {
