@@ -2,6 +2,11 @@
 
 All notable changes to this package will be documented in this file.
 
+## [0.1.1] - 2025-10-17
+### Added
+- Added account features
+
+
 ## [0.0.1-dev.1] - 2025-10-12
 ### Added
 - Initial pre-alpha release of the Keeta Dart SDK.
