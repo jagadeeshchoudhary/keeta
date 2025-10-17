@@ -7,6 +7,8 @@ import 'package:keeta/src/block_feature/block.dart';
 import 'package:keeta/src/utils/utils.dart';
 import 'package:meta/meta.dart';
 
+/// Immutable account model that encapsulates a key pair, its algorithm and
+/// convenient encodings used across the protocol. Instances are value-equal.
 @immutable
 class Account {
   /// Constructor: Account(keyPair: KeyPair, keyAlgorithm: KeyAlgorithm)
@@ -42,6 +44,7 @@ class Account {
   factory Account.fromPublicKeyAndType(final Uint8List publicKeyAndType) =>
       Account.fromData(publicKeyAndType);
 
+  /// Internal constructor used by factories. The instance is immutable.
   const Account._({
     required this.keyPair,
     required this.publicKeyString,
@@ -61,6 +64,7 @@ class Account {
     if (other is! Account) {
       return false;
     }
+    // Value-based comparison across core identity properties
     return keyAlgorithm == other.keyAlgorithm &&
         keyPair == other.keyPair &&
         publicKeyString == other.publicKeyString &&
@@ -75,6 +79,7 @@ class Account {
     _bytesHash(publicKeyAndType),
   );
 
+  /// Lightweight equality to avoid pulling extra deps.
   static bool _listEquals(final List<int> a, final List<int> b) {
     if (identical(a, b)) {
       return true;
@@ -90,6 +95,7 @@ class Account {
     return true;
   }
 
+  /// Jenkins-like mix function for a small stable hash over byte arrays.
   static int _bytesHash(final List<int> bytes) {
     int hash = 0;
     for (final int b in bytes) {
@@ -216,17 +222,17 @@ class Account {
     required final String fromPublicKey,
     required final KeyAlgorithm algorithm,
   }) {
-    // Construct the array of public key bytes
+    // Compose: [type|publicKey] then later append checksum, finally Base32
     final Uint8List keyBytes = fromPublicKey.toBytes();
     final List<int> pubKeyValues = <int>[algorithm.rawValue, ...keyBytes];
-    fromPublicKey.toBytes();
+    // toBytes() validates/normalizes the provided public key string
 
     return publicKeyStringFromBytes(Uint8List.fromList(pubKeyValues));
   }
 
   /// Get public key string from key bytes
   static String publicKeyStringFromBytes(final Uint8List keyBytes) {
-    // Append the checksum
+    // Compute and append checksum over the `[type|publicKey]` bytes
     final Uint8List checksumBytes = Hash.createData(
       fromData: keyBytes,
       length: checksumLength,
@@ -236,7 +242,7 @@ class Account {
       ...checksumBytes,
     ]);
 
-    // Ensure we have the right size
+    // Validate final length matches the supported key sizes
     if (!publicKeyLengths.values.any(
       (final int length) => extendedKeyBytes.length == length,
     )) {

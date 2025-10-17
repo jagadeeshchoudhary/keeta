@@ -2,6 +2,10 @@
 
 All notable changes to this package will be documented in this file.
 
+## [0.1.2] - 2025-10-17
+### Added
+- No Changes. added comments.
+
 ## [0.1.1] - 2025-10-17
 ### Added
 - Added account features
