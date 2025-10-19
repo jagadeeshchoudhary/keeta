@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+
 import 'package:asn1lib/asn1lib.dart';
+import 'package:keeta/src/operations/admin_modify_balance_operation.dart';
 import 'package:keeta/src/operations/bloc_operation.dart';
 import 'package:keeta/src/operations/bloc_operation_type.dart';
 import 'package:keeta/src/operations/create_identifier_operation.dart';
@@ -7,7 +9,6 @@ import 'package:keeta/src/operations/receive_operation.dart';
 import 'package:keeta/src/operations/send_operation.dart';
 import 'package:keeta/src/operations/set_info_operation.dart';
 import 'package:keeta/src/operations/set_rep_operation.dart';
-import 'package:keeta/src/operations/token_Admin_modify_balance_operation.dart';
 import 'package:keeta/src/operations/token_admin_supply_operation.dart';
 import 'package:keeta/src/utils/custom_exception.dart';
 

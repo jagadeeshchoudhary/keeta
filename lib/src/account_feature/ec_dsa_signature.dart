@@ -5,7 +5,7 @@ import 'package:asn1lib/asn1lib.dart';
 class ECDSASignature {
   const ECDSASignature({required this.r, required this.s});
 
-  /// Parse DER-encoded ECDSA signature ([r, s])
+  /// Parse DER-encoded ECDSA signature
   factory ECDSASignature.fromDER(final Uint8List derBytes) {
     final ASN1Parser parser = ASN1Parser(derBytes);
     final ASN1Sequence sequence = parser.nextObject() as ASN1Sequence;
