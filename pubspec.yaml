@@ -1,6 +1,6 @@
 name: keeta
 description: "Dart SDK to interact with the Keeta Network. Keeta is world’s most scalable layer-1 blockchain network. "
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/jagadeeshchoudhary/keeta
 repository: https://github.com/jagadeeshchoudhary/keeta
 issue_tracker: https://github.com/jagadeeshchoudhary/keeta/issues
