@@ -136,6 +136,31 @@ class CustomException implements Exception {
     'Invalid Length',
   );
 
+  static const CustomException invalidBlocksTag = CustomException(
+    'Invalid blocks tag',
+  );
+  static const CustomException invalidBlocksDataSequence = CustomException(
+    'Invalid blocks data sequence',
+  );
+  static const CustomException invalidBlocksSequenceLength = CustomException(
+    'Invalid blocks sequence length',
+  );
+  static const CustomException invalidBlocksOID = CustomException(
+    'Invalid blocks OID',
+  );
+  static const CustomException unknownHashFunction = CustomException(
+    'Unknown hash function',
+  );
+  static const CustomException unsupportedHashFunction = CustomException(
+    'Unsupported hash function',
+  );
+  static const CustomException invalidBlocksSequence = CustomException(
+    'Invalid blocks sequence',
+  );
+  static const CustomException invalidBlockHash = CustomException(
+    'Invalid block hash',
+  );
+
   @override
   String toString() => message;
 }
