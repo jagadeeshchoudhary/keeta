@@ -122,7 +122,7 @@ class VoteStaple {
       if (blockAsn1 is! ASN1OctetString) {
         throw CustomException.invalidASN1BlockData;
       }
-      unorderedBlocks.add(Block.fromData(blockAsn1.valueBytes()));
+      unorderedBlocks.add(Block.fromData(data: blockAsn1.valueBytes()));
     }
 
     final Map<String, Block> blockHashes = <String, Block>{

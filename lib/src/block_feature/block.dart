@@ -18,7 +18,12 @@ class Block {
     required this.signature,
   });
 
-  factory Block.fromData(final Uint8List data) {
+  factory Block.createFromBase64({required final String base64}) {
+    final Uint8List data = base64Decode(base64);
+    return Block.fromData(data: data);
+  }
+
+  factory Block.fromData({required final Uint8List data}) {
     final ASN1Parser asn1Parser = ASN1Parser(data);
     final ASN1Object asn1 = asn1Parser.nextObject();
 
@@ -55,7 +60,7 @@ class Block {
       version = versionValue;
     }
 
-    if (sequence.length != 8 && sequence.length != 9) {
+    if (!(sequence.length >= 8 && sequence.length <= 9)) {
       throw CustomException.invalidASN1SequenceLength;
     }
 
@@ -128,13 +133,13 @@ class Block {
   final String hash;
   final BlockSignature signature;
 
-  static String accountOpeningHash(final Account account) {
+  static String accountOpeningHash({required final Account account}) {
     final Uint8List publicKeyBytes = account.keyPair.publicKey.toBytes();
     return Hash.create(fromBytes: publicKeyBytes);
   }
 
   List<ASN1Object> toAsn1() {
-    final List<ASN1Object> rawASN1 = rawData.toASN1Values();
+    final List<ASN1Object> rawASN1 = rawData.asn1Values();
 
     if (signature is SingleSignature) {
       final Uint8List sig = (signature as SingleSignature).signature;

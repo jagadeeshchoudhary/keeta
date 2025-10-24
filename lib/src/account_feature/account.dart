@@ -170,7 +170,11 @@ class Account {
   }
 
   /// Generate identifier account
-  Account generateIdentifier({final KeyAlgorithm type = KeyAlgorithm.token}) {
+  Account generateIdentifier({
+    final KeyAlgorithm type = KeyAlgorithm.token,
+    final int index = 0,
+    final String? previous,
+  }) {
     if (isIdentifier) {
       if (keyAlgorithm != KeyAlgorithm.network) {
         throw CustomException.invalidIdentifierAccount;
@@ -180,7 +184,8 @@ class Account {
       }
     }
 
-    final String accountOpeningHash = Block.accountOpeningHash(this);
+    final String accountOpeningHash =
+        previous ?? Block.accountOpeningHash(account: this);
     final Uint8List blockHash = accountOpeningHash.toBytes();
 
     final Uint8List combinedBytes = Uint8List.fromList(<int>[
@@ -190,7 +195,11 @@ class Account {
 
     final String seed = Hash.create(fromBytes: combinedBytes);
 
-    return AccountBuilder.createFromSeed(seed: seed, index: 0, algorithm: type);
+    return AccountBuilder.createFromSeed(
+      seed: seed,
+      index: index,
+      algorithm: type,
+    );
   }
 
   /// Prepare data for signing/verification

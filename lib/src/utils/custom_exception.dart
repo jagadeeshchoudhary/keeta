@@ -1,3 +1,5 @@
+import 'package:keeta/src/utils/oid.dart';
+
 class CustomException implements Exception {
   const CustomException(this.message);
   const CustomException.invalidPublicKeyAlgo({required final String key})
@@ -161,6 +163,138 @@ class CustomException implements Exception {
     'Invalid block hash',
   );
 
+  static const CustomException multipleSetRepOperations = CustomException(
+    'Multiple set representative operations found in block',
+  );
+  static const CustomException insufficientDataToSignBlock = CustomException(
+    'insufficient data to sign block',
+  );
+  static const CustomException negativeNetworkId = CustomException(
+    'negative network id',
+  );
+  static const CustomException negativeSubnetId = CustomException(
+    'negative subnet id',
+  );
+  static const CustomException noPrivateKeyOrSignatureToSignBlock =
+      CustomException('no private key or signature to sign block');
+  static const CustomException invalidBalanceValue = CustomException(
+    'invalid balance value',
+  );
+  static const CustomException insufficientBalanceToCoverNetworkFees =
+      CustomException('insufficient balance to cover network fees');
+
+  static var invalidContextSpecificTag;
+
+  static var invalidQuote;
+
+  static var invalidImplicitTag;
+
+  static var invalidCertificateSequence;
+
+  static var invalidCertificateSequenceLength;
+
+  static var invalidX509Data;
+
+  static var invalidCertificateValue;
+
+  static var invalidSignatureInfoSequence;
+
+  static var invalidSignatureInfoSequenceLength;
+
+  static var invalidSignatureInfoOID;
+
+  static var invalidIssuerData;
+
+  static var invalidValidityData;
+
+  static var invalidValiditySequenceLength;
+
+  static var invalidValidity;
+
+  static var invalidSubjectData;
+
+  static var serialMismatch;
+
+  static var invalidSignatureSequence;
+
+  static var invalidSignatureSequenceLength;
+
+  static var invalidSignatureDataOID;
+
+  static var signatureInformationMismatch;
+
+  static var issuerSignatureSchemeMismatch;
+
+  static var unsupportedSignatureScheme;
+
+  static var invalidSignatureDataBitString;
+
+  static var invalidSignatureData;
+
+  static var invalidExtensions;
+
+  static var invalidExtensionSequence;
+
+  static var invalidExtensionOID;
+
+  static var invalidExtensionCriticalCheck;
+
+  static var invalidHashDataExtension;
+
+  static var invalidFeeDataExtension;
+
+  static var permanentVoteCanNotHaveFees;
+
+  static var missingVotes;
+
+  static var invalidASN1BlockSequence;
+
+  static var invalidASN1VotesSequence;
+
+  static var invalidASN1VoteData;
+
+  static var invalidASN1BlockData;
+
+  static var blocksAndVotesCountNotMatching;
+
+  static var inconsistentBlocksAndVoteBlocks;
+
+  static var inconsistentVoteBlockHashesOrder;
+
+  static var repVotedMoreThanOnce;
+
+  static var inconsistentVotePermanence;
+
+  static var invalidPermanentVote;
+
+  static var missingFeeExtension;
+
+  static var notPublished;
+
+  static var blockAccountMismatch;
+
+  static var blockHashMismatch;
+
+  static var feesRequiredButFeeBuilderMissing;
+
+  static var invalidIdempotentData;
+
   @override
   String toString() => message;
+
+  static unknownSignatureInfoOID(String signatureInfoOidValue) {}
+
+  static unknownSignatureDataOID(String voteSignatureInfoOidValue) {}
+
+  static unknownCriticalExtension(OID oid) {}
+
+  static clientRepresentativeNotFound(String publicKeyString) {}
+
+  static noVotes(List<Object> errors) {}
+
+  static blockContentDecodingError(String s) {}
+
+  static noPendingBlock(List<Object> errors) {}
+
+  static invalidSupplyValue(param0) {}
 }

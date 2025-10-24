@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:asn1lib/asn1lib.dart';
 import 'package:keeta/src/account_feature/account.dart';
@@ -19,6 +20,7 @@ class RawBlockData {
     required this.operations,
     required this.created,
     this.subnet,
+    this.idempotent,
   });
 
   final BlockVersion version;
@@ -30,19 +32,57 @@ class RawBlockData {
   final Account account;
   final List<BlockOperation> operations;
   final DateTime created;
+  final String? idempotent;
 
-  /// Encodes the block data into a list of ASN.1 objects.
-  /// Throws an exception if encoding fails.
-  List<ASN1Object> toASN1Values() {
-    // In Swift, previous.toBytes() likely decodes a hex string.
-    // The `convert` package is used here for that.
+  /// Converts the block data to bytes
+  Uint8List toBytes() {
+    final List<ASN1Object> values = asn1Values();
+    final ASN1Sequence sequence = ASN1Sequence()..elements.addAll(values);
+    final Uint8List encoded = sequence.encodedBytes;
+    return encoded;
+  }
+
+  /// Computes the hash of the block data according to its version
+  String hash() {
+    switch (version) {
+      case BlockVersion.v1:
+        return Hash.create(fromBytes: toBytes(), length: 32);
+      case BlockVersion.v2:
+        final List<ASN1Object> values = asn1Values();
+        return TaggedValue.contextSpecific(
+          tag: version.tag,
+          asn1Objects: values,
+        ).hash();
+    }
+  }
+
+  /// Encodes the block data into a list of ASN.1 objects
+  List<ASN1Object> asn1Values() {
+    Uint8List? idempotentData;
+    if (idempotent != null) {
+      // Try base64 decode first, then UTF-8
+      try {
+        idempotentData = base64Decode(idempotent!);
+      } catch (_) {
+        final Uint8List? utf8Data = utf8.encode(idempotent!);
+        if (utf8Data == null) {
+          throw CustomException.invalidIdempotentData;
+        }
+        idempotentData = utf8Data;
+      }
+    } else {
+      idempotentData = null;
+    }
+
     final Uint8List previousBytes = previous.toBytes();
-
-    final ASN1Integer? asn1Subnet = (subnet != null)
+    final ASN1Integer? asn1Subnet = subnet != null
         ? ASN1Integer(subnet!)
         : null;
+    final ASN1OctetString? idempotentAsn1 = idempotentData != null
+        ? ASN1OctetString(idempotentData)
+        : null;
 
-    final List<ASN1Object> asn1Operations = operations
+    final List<ASN1Object> operationsAsn1 = operations
         .map((final BlockOperation op) => op.tagged())
         .toList();
 
@@ -51,53 +91,49 @@ class RawBlockData {
 
     switch (version) {
       case BlockVersion.v1:
-        return <ASN1Object>[
+        final List<ASN1Object?> values = <ASN1Object?>[
           ASN1Integer(version.value),
           ASN1Integer(network),
           asn1Subnet ?? ASN1Null(),
+          idempotentAsn1,
           ASN1GeneralizedTime(created.toUtc()),
           ASN1OctetString(signerBytes),
-          (account != signer) ? ASN1OctetString(accountBytes) : ASN1Null(),
+          !_bytesEqual(accountBytes, signerBytes)
+              ? ASN1OctetString(accountBytes)
+              : ASN1Null(),
           ASN1OctetString(previousBytes),
-          ASN1Sequence()..elements.addAll(asn1Operations),
+          ASN1Sequence()..elements.addAll(operationsAsn1),
         ];
+        return values.whereType<ASN1Object>().toList();
+
       case BlockVersion.v2:
-        return <ASN1Object>[
+        final List<ASN1Object?> values = <ASN1Object?>[
           ASN1Integer(network),
-          if (asn1Subnet != null) asn1Subnet,
+          asn1Subnet,
+          idempotentAsn1,
           ASN1GeneralizedTime(created.toUtc()),
           ASN1Integer(purpose.value),
           ASN1OctetString(accountBytes),
-          (signer != account) ? ASN1OctetString(signerBytes) : ASN1Null(),
+          !_bytesEqual(signerBytes, accountBytes)
+              ? ASN1OctetString(signerBytes)
+              : ASN1Null(),
           ASN1OctetString(previousBytes),
-          ASN1Sequence()..elements.addAll(asn1Operations),
+          ASN1Sequence()..elements.addAll(operationsAsn1),
         ];
+        return values.whereType<ASN1Object>().toList();
     }
   }
 
-  /// Serializes the ASN.1 values into a byte list (Uint8List).
-  /// This corresponds to  sequence of values, which is the V1 hashing method.
-  Uint8List toBytes() {
-    final List<ASN1Object> values = toASN1Values();
-    // In ASN.1, a list of values is typically encoded as a SEQUENCE.
-    final ASN1Sequence sequence = ASN1Sequence()..elements.addAll(values);
-    return sequence.encodedBytes;
-  }
-
-  /// Computes the hash of the block data according to its version.
-  /// Returns the hash as a hex-encoded string.
-  String hash() {
-    switch (version) {
-      case BlockVersion.v1:
-        return Hash.create(fromBytes: toBytes(), length: 32);
-
-      case BlockVersion.v2:
-        final List<ASN1Object> values = toASN1Values();
-        final TaggedValue tagged = TaggedValue.contextSpecific(
-          tag: version.tag,
-          asn1Objects: values,
-        );
-        return tagged.hash();
+  /// Helper method to compare byte arrays
+  static bool _bytesEqual(final Uint8List a, final Uint8List b) {
+    if (a.length != b.length) {
+      return false;
     }
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }
