@@ -279,6 +279,12 @@ class CustomException implements Exception {
 
   static var invalidIdempotentData;
 
+  static var invalidString;
+
+  static var cantForwardToFromAccount;
+
+  static var invalidForward;
+
   @override
   String toString() => message;
 

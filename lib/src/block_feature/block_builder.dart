@@ -13,6 +13,7 @@ import 'package:keeta/src/operations/bloc_operation.dart';
 import 'package:keeta/src/operations/bloc_operation_type.dart';
 import 'package:keeta/src/operations/send_operation.dart';
 import 'package:keeta/src/utils/custom_exception.dart';
+import 'package:keeta/src/utils/string_idempotent.dart';
 import 'package:keeta/src/votes/fee.dart';
 import 'package:keeta/src/votes/vote.dart';
 import 'package:keeta/src/votes/vote_staple.dart';
@@ -174,7 +175,7 @@ class BlockBuilder {
   /// Generates an idempotent key (UUID v4 uppercase)
   static String idempotentKey() {
     final String uuid = const Uuid().v4();
-    return uuid.toUpperCase();
+    return uuid.toUpperCase().idempotent();
   }
 
   // ----------------------

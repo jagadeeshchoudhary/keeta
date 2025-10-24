@@ -179,7 +179,9 @@ class Block {
         ? (sequence[2] as ASN1Integer).valueAsBigInteger
         : null;
 
-    final ASN1Object anyTime = sequence[3];
+    final String? idempotent = parseIdempotent(asn1: sequence[3]);
+    final int offset = idempotent != null ? 0 : 1;
+    final ASN1Object anyTime = sequence[4 - offset];
     if (anyTime is! ASN1UtcTime && anyTime is! ASN1GeneralizedTime) {
       throw CustomException.invalidDate;
     }
@@ -187,12 +189,14 @@ class Block {
         ? anyTime.dateTimeValue
         : (anyTime as ASN1GeneralizedTime).dateTimeValue;
 
-    final Uint8List signerData = (sequence[4] as ASN1OctetString).octets;
+    final Uint8List signerData =
+        (sequence[5 - offset] as ASN1OctetString).octets;
     final Account signer = Account.fromData(signerData);
 
     Account account;
-    if (sequence[5] is ASN1OctetString) {
-      final Uint8List accountData = (sequence[5] as ASN1OctetString).octets;
+    if (sequence[6 - offset] is ASN1OctetString) {
+      final Uint8List accountData =
+          (sequence[5 - offset] as ASN1OctetString).octets;
       account = Account.fromData(accountData);
 
       if (account == signer) {
@@ -202,16 +206,18 @@ class Block {
       account = signer;
     }
 
-    final Uint8List previousHashData = (sequence[6] as ASN1OctetString).octets;
+    final Uint8List previousHashData =
+        (sequence[7 - offset] as ASN1OctetString).octets;
     final String previousHash = previousHashData.toHexString();
 
     final List<ASN1Object> operationsSequence =
-        (sequence[7] as ASN1Sequence).elements;
+        (sequence[8 - offset] as ASN1Sequence).elements;
     final List<BlockOperation> operations = operationsSequence
         .map(BlockOperationBuilder.create)
         .toList();
 
-    final Uint8List signatureBytes = (sequence[8] as ASN1OctetString).octets;
+    final Uint8List signatureBytes =
+        (sequence[9 - offset] as ASN1OctetString).octets;
 
     final bool opening = previousHash == account.publicKeyString;
 
@@ -219,6 +225,7 @@ class Block {
       version: BlockVersion.v1,
       purpose: BlockPurpose.generic,
       previous: previousHash,
+      idempotent: idempotent,
       network: network,
       subnet: subnet,
       signer: signer,
@@ -239,9 +246,12 @@ class Block {
         ? (sequence[1] as ASN1Integer).valueAsBigInteger
         : null;
 
-    final int offset = subnet != null ? 0 : 1;
+    int offset = subnet != null ? 0 : 1;
 
-    final ASN1Object anyTime = sequence[2 - offset];
+    final String? idempotent = parseIdempotent(asn1: sequence[2 - offset]);
+    offset += idempotent != null ? 0 : 1;
+
+    final ASN1Object anyTime = sequence[3 - offset];
     if (anyTime is! ASN1UtcTime && anyTime is! ASN1GeneralizedTime) {
       throw CustomException.invalidDate;
     }
@@ -249,17 +259,17 @@ class Block {
         ? anyTime.dateTimeValue
         : (anyTime as ASN1GeneralizedTime).dateTimeValue;
 
-    final int purposeRaw = (sequence[3 - offset] as ASN1Integer).intValue;
+    final int purposeRaw = (sequence[4 - offset] as ASN1Integer).intValue;
     final BlockPurpose? purpose = BlockPurpose.fromRawValue(purposeRaw);
     if (purpose == null) {
       throw CustomException.invalidPurpose;
     }
 
     final Uint8List accountData =
-        (sequence[4 - offset] as ASN1OctetString).octets;
+        (sequence[5 - offset] as ASN1OctetString).octets;
     final Account account = Account.fromData(accountData);
 
-    final ASN1Object signerContainer = sequence[5 - offset];
+    final ASN1Object signerContainer = sequence[6 - offset];
     Account signer;
     if (signerContainer is ASN1Null) {
       signer = account;
@@ -271,16 +281,16 @@ class Block {
     }
 
     final Uint8List previousHashData =
-        (sequence[6 - offset] as ASN1OctetString).octets;
+        (sequence[7 - offset] as ASN1OctetString).octets;
     final String previousHash = previousHashData.toHexString();
 
     final List<ASN1Object> operationsSequence =
-        (sequence[7 - offset] as ASN1Sequence).elements;
+        (sequence[8 - offset] as ASN1Sequence).elements;
     final List<BlockOperation> operations = operationsSequence
         .map(BlockOperationBuilder.create)
         .toList();
 
-    final ASN1Object signatureContainer = sequence[8 - offset];
+    final ASN1Object signatureContainer = sequence[9 - offset];
     BlockSignature signature;
     if (signatureContainer is ASN1OctetString) {
       signature = SingleSignature(signatureContainer.octets);
@@ -294,6 +304,7 @@ class Block {
       version: BlockVersion.v2,
       purpose: purpose,
       previous: previousHash,
+      idempotent: idempotent,
       network: network,
       subnet: subnet,
       signer: signer,
@@ -303,5 +314,23 @@ class Block {
     );
 
     return (rawBlock, signature, opening);
+  }
+
+  static String? parseIdempotent({required final ASN1Object asn1}) {
+    // If octet string value is missing, return null
+    final Uint8List? idempotentData = asn1 is ASN1OctetString
+        ? asn1.octets
+        : null;
+    if (idempotentData == null) {
+      return null;
+    }
+
+    try {
+      // Convert bytes to UTF-8 string
+      final String idempotentString = utf8.decode(idempotentData);
+      return idempotentString;
+    } catch (_) {
+      throw CustomException.invalidIdempotentData;
+    }
   }
 }
