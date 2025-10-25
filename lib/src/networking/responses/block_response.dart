@@ -43,7 +43,7 @@ sealed class BlockContentResponse {
       try {
         return BlockContentResponseV1.fromJson(json);
       } catch (_) {
-        throw CustomException.blockContentDecodingError(
+        throw const CustomException.blockContentDecodingError(
           'Data did not match BlockContentResponseV1 or BlockContentResponseV2',
         );
       }
@@ -91,10 +91,10 @@ class BlockContentResponseV2 extends BlockContentResponse {
 class BlockContentResponseV1 extends BlockContentResponse {
   const BlockContentResponseV1({
     required this.hash,
-    this.idempotent,
     required this.signer,
     required this.signature,
     required this.binary,
+    this.idempotent,
   }) : super._();
 
   factory BlockContentResponseV1.fromJson(final Map<String, dynamic> json) =>

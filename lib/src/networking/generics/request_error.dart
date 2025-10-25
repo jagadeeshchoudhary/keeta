@@ -47,8 +47,8 @@ class InvalidResponseError<T> extends RequestError<T> {
   final String? response;
 
   @override
-  String toString() =>
-      'RequestError.invalidResponse(statusCode: $statusCode, response: $response)';
+  String toString() => '''
+RequestError.invalidResponse(statusCode: $statusCode, response: $response)''';
 }
 
 /// Unknown error

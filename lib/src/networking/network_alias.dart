@@ -12,7 +12,7 @@ enum NetworkAlias {
       'wss://rep$number.$name.network.api.keeta.com/p2p';
 
   /// Returns the address for a representative
-  String keetaRepAddress({int number = 1}) {
+  String keetaRepAddress({final int number = 1}) {
     final List<String> addresses;
 
     switch (this) {

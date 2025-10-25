@@ -8,6 +8,34 @@ class CustomException implements Exception {
   const CustomException.invalidPublicKeyLength(final int length)
     : message = 'Invalid public key length: $length';
 
+  const CustomException.unknownSignatureInfoOID(
+    final String signatureInfoOidValue,
+  ) : message = 'Unknown Signature Info OID: $signatureInfoOidValue';
+
+  const CustomException.unknownSignatureDataOID(
+    final String voteSignatureInfoOidValue,
+  ) : message = 'Unknown Signature Data OID: $voteSignatureInfoOidValue';
+
+  const CustomException.unknownCriticalExtension(final OID oid)
+    : message = 'Unknown Critical Extension: $oid';
+
+  const CustomException.clientRepresentativeNotFound(
+    final String publicKeyString,
+  ) : message =
+          'Client Representative Not Found for public key: $publicKeyString';
+
+  const CustomException.noVotes(final List<Object> errors)
+    : message = 'No Votes: $errors';
+
+  const CustomException.blockContentDecodingError(final String s)
+    : message = 'Block Content Decoding Error: $s';
+
+  const CustomException.noPendingBlock(final List<Object> errors)
+    : message = 'No Pending Block: $errors';
+
+  const CustomException.invalidSupplyValue(final String? param0)
+    : message = 'Invalid Supply Value: $param0';
+
   final String message;
 
   static const CustomException signingNotSupported = CustomException(
@@ -183,124 +211,219 @@ class CustomException implements Exception {
   static const CustomException insufficientBalanceToCoverNetworkFees =
       CustomException('insufficient balance to cover network fees');
 
-  static var invalidContextSpecificTag;
+  static CustomException invalidContextSpecificTag = const CustomException(
+    'Invalid context specific tag',
+  );
 
-  static var invalidQuote;
+  static CustomException invalidQuote = const CustomException('Invalid quote');
 
-  static var invalidImplicitTag;
+  static CustomException invalidImplicitTag = const CustomException(
+    'Invalid implicit tag',
+  );
 
-  static var invalidCertificateSequence;
+  static CustomException invalidCertificateSequence = const CustomException(
+    'Invalid certificate sequence',
+  );
 
-  static var invalidCertificateSequenceLength;
+  static CustomException invalidCertificateSequenceLength =
+      const CustomException('Invalid certificate sequence length');
 
-  static var invalidX509Data;
+  static CustomException invalidX509Data = const CustomException(
+    'Invalid X509 data',
+  );
 
-  static var invalidCertificateValue;
+  static CustomException invalidCertificateValue = const CustomException(
+    'Invalid certificate value',
+  );
 
-  static var invalidSignatureInfoSequence;
+  static CustomException invalidSignatureInfoSequence = const CustomException(
+    'Invalid signature info sequence',
+  );
 
-  static var invalidSignatureInfoSequenceLength;
+  static CustomException invalidSignatureInfoSequenceLength =
+      const CustomException('Invalid signature info sequence length');
 
-  static var invalidSignatureInfoOID;
+  static CustomException invalidSignatureInfoOID = const CustomException(
+    'Invalid signature info OID',
+  );
 
-  static var invalidIssuerData;
+  static CustomException invalidIssuerData = const CustomException(
+    'Invalid issuer data',
+  );
 
-  static var invalidValidityData;
+  static CustomException invalidValidityData = const CustomException(
+    'Invalid validity data',
+  );
 
-  static var invalidValiditySequenceLength;
+  static CustomException invalidValiditySequenceLength = const CustomException(
+    'Invalid validity sequence length',
+  );
 
-  static var invalidValidity;
+  static CustomException invalidValidity = const CustomException(
+    'Invalid validity',
+  );
 
-  static var invalidSubjectData;
+  static CustomException invalidSubjectData = const CustomException(
+    'Invalid subject data',
+  );
 
-  static var serialMismatch;
+  static CustomException serialMismatch = const CustomException(
+    'Serial mismatch',
+  );
 
-  static var invalidSignatureSequence;
+  static CustomException invalidSignatureSequence = const CustomException(
+    'Invalid signature sequence',
+  );
 
-  static var invalidSignatureSequenceLength;
+  static CustomException invalidSignatureSequenceLength = const CustomException(
+    'Invalid signature sequence length',
+  );
 
-  static var invalidSignatureDataOID;
+  static CustomException invalidSignatureDataOID = const CustomException(
+    'Invalid signature data OID',
+  );
 
-  static var signatureInformationMismatch;
+  static CustomException signatureInformationMismatch = const CustomException(
+    'Signature information mismatch',
+  );
 
-  static var issuerSignatureSchemeMismatch;
+  static CustomException issuerSignatureSchemeMismatch = const CustomException(
+    'Issuer signature scheme mismatch',
+  );
 
-  static var unsupportedSignatureScheme;
+  static CustomException unsupportedSignatureScheme = const CustomException(
+    'Unsupported signature scheme',
+  );
 
-  static var invalidSignatureDataBitString;
+  static CustomException invalidSignatureDataBitString = const CustomException(
+    'Invalid signature data bit string',
+  );
 
-  static var invalidSignatureData;
+  static CustomException invalidSignatureData = const CustomException(
+    'Invalid signature data',
+  );
 
-  static var invalidExtensions;
+  static CustomException invalidExtensions = const CustomException(
+    'Invalid extensions',
+  );
 
-  static var invalidExtensionSequence;
+  static CustomException invalidExtensionSequence = const CustomException(
+    'Invalid extension sequence',
+  );
 
-  static var invalidExtensionOID;
+  static CustomException invalidExtensionOID = const CustomException(
+    'Invalid extension OID',
+  );
 
-  static var invalidExtensionCriticalCheck;
+  static CustomException invalidExtensionCriticalCheck = const CustomException(
+    'Invalid extension critical check',
+  );
 
-  static var invalidHashDataExtension;
+  static CustomException invalidHashDataExtension = const CustomException(
+    'Invalid hash data extension',
+  );
 
-  static var invalidFeeDataExtension;
+  static CustomException invalidFeeDataExtension = const CustomException(
+    'Invalid fee data extension',
+  );
 
-  static var permanentVoteCanNotHaveFees;
+  static CustomException permanentVoteCanNotHaveFees = const CustomException(
+    'Permanent vote can not have fees',
+  );
 
-  static var missingVotes;
+  static CustomException missingVotes = const CustomException('Missing votes');
 
-  static var invalidASN1BlockSequence;
+  static CustomException invalidASN1BlockSequence = const CustomException(
+    'Invalid ASN.1 block sequence',
+  );
 
-  static var invalidASN1VotesSequence;
+  static CustomException invalidASN1VotesSequence = const CustomException(
+    'Invalid ASN.1 votes sequence',
+  );
 
-  static var invalidASN1VoteData;
+  static CustomException invalidASN1VoteData = const CustomException(
+    'Invalid ASN.1 vote data',
+  );
 
-  static var invalidASN1BlockData;
+  static CustomException invalidASN1BlockData = const CustomException(
+    'Invalid ASN.1 block data',
+  );
 
-  static var blocksAndVotesCountNotMatching;
+  static CustomException blocksAndVotesCountNotMatching = const CustomException(
+    'Blocks and votes count not matching',
+  );
 
-  static var inconsistentBlocksAndVoteBlocks;
+  static CustomException inconsistentBlocksAndVoteBlocks =
+      const CustomException('Inconsistent blocks and vote blocks');
 
-  static var inconsistentVoteBlockHashesOrder;
+  static CustomException inconsistentVoteBlockHashesOrder =
+      const CustomException('Inconsistent vote block hashes order');
 
-  static var repVotedMoreThanOnce;
+  static CustomException repVotedMoreThanOnce = const CustomException(
+    'Representative voted more than once',
+  );
 
-  static var inconsistentVotePermanence;
+  static CustomException inconsistentVotePermanence = const CustomException(
+    'Inconsistent vote permanence',
+  );
 
-  static var invalidPermanentVote;
+  static CustomException invalidPermanentVote = const CustomException(
+    'Invalid permanent vote',
+  );
 
-  static var missingFeeExtension;
+  static CustomException missingFeeExtension = const CustomException(
+    'Missing fee extension',
+  );
 
-  static var notPublished;
+  static CustomException notPublished = const CustomException('Not published');
 
-  static var blockAccountMismatch;
+  static CustomException blockAccountMismatch = const CustomException(
+    'Block account mismatch',
+  );
 
-  static var blockHashMismatch;
+  static CustomException blockHashMismatch = const CustomException(
+    'Block hash mismatch',
+  );
 
-  static var feesRequiredButFeeBuilderMissing;
+  static CustomException feesRequiredButFeeBuilderMissing =
+      const CustomException('Fees required but FeeBuilder missing');
 
-  static var invalidIdempotentData;
+  static CustomException invalidIdempotentData = const CustomException(
+    'Invalid idempotent data',
+  );
 
-  static var invalidString;
+  static CustomException invalidString = const CustomException(
+    'Invalid string',
+  );
 
-  static var cantForwardToFromAccount;
+  static CustomException cantForwardToFromAccount = const CustomException(
+    'Cannot forward to the from account',
+  );
 
-  static var invalidForward;
+  static CustomException invalidForward = const CustomException(
+    'Invalid forward',
+  );
+
+  static CustomException missingAccount = const CustomException(
+    'Missing account',
+  );
+
+  static CustomException invalidTokenAccount = const CustomException(
+    'Invalid token account',
+  );
+
+  static CustomException feeAccountMissing = const CustomException(
+    'Fee account missing',
+  );
+
+  static CustomException noTokenAccount = const CustomException(
+    'No token account',
+  );
+
+  static CustomException noTokenSupply = const CustomException(
+    'No token supply',
+  );
 
   @override
   String toString() => message;
-
-  static unknownSignatureInfoOID(String signatureInfoOidValue) {}
-
-  static unknownSignatureDataOID(String voteSignatureInfoOidValue) {}
-
-  static unknownCriticalExtension(OID oid) {}
-
-  static clientRepresentativeNotFound(String publicKeyString) {}
-
-  static noVotes(List<Object> errors) {}
-
-  static blockContentDecodingError(String s) {}
-
-  static noPendingBlock(List<Object> errors) {}
-
-  static invalidSupplyValue(param0) {}
 }

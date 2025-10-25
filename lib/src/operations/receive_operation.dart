@@ -158,7 +158,7 @@ class ReceiveOperation extends BlockOperation {
     ];
 
     if (forward != null) {
-      values.add(ASN1OctetString(forward!));
+      values.add(ASN1OctetString(forward));
     }
 
     return values;

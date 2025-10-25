@@ -1,3 +1,5 @@
+import 'package:keeta/src/utils/utils.dart';
+
 class MetaData {
   MetaData({required this.decimalPlaces});
 
@@ -8,4 +10,7 @@ class MetaData {
   Map<String, dynamic> toJson() => <String, dynamic>{
     'decimalPlaces': decimalPlaces,
   };
+
+  static MetaData create({required final String btoa}) =>
+      DecodableBtoa.create<MetaData>(btoa, MetaData.fromJson);
 }

@@ -80,7 +80,7 @@ class BlockBuilder {
     );
   }
 
-  /// Creates a fee block with provided previous hash 
+  /// Creates a fee block with provided previous hash
   /// using NetworkConfig (synchronous)
   static Block feeBlockWithPreviousAndConfig({
     required final VoteStaple voteStaple,

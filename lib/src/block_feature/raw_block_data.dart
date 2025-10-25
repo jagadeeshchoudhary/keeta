@@ -64,11 +64,7 @@ class RawBlockData {
       try {
         idempotentData = base64Decode(idempotent!);
       } catch (_) {
-        final Uint8List? utf8Data = utf8.encode(idempotent!);
-        if (utf8Data == null) {
-          throw CustomException.invalidIdempotentData;
-        }
-        idempotentData = utf8Data;
+        idempotentData = utf8.encode(idempotent!);
       }
     } else {
       idempotentData = null;

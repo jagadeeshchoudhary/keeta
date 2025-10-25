@@ -24,7 +24,7 @@ class Fee {
     this.token,
   });
 
- /// Creates a Fee from raw data
+  /// Creates a Fee from raw data
   factory Fee.fromData({required final Uint8List data}) {
     final ASN1Parser parser = ASN1Parser(data);
     final List<ASN1Object> asn1Objects = <ASN1Object>[];
@@ -104,7 +104,6 @@ class Fee {
     return Fee(quote: quote, amount: amount, payTo: payTo, token: token);
   }
 
- 
   final bool quote;
   final BigInt amount;
   final Account? payTo;
